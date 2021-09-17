@@ -57,7 +57,7 @@ except PermissionError:
 	ErrorDialog = Error(errorMessage, tk.Tk())
 	sys.exit()
 dev.grab()
-os.setuid(parsed.id) #gets ID From user name
+os.setuid(parsed.id)
 username = os.getlogin()
 os.environ["MAIL"] = "/var/spool/mail/{}".format(username.lower())
 os.environ["LOGNAME"] = "{}".format(username.lower())
