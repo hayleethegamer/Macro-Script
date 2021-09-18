@@ -12,3 +12,7 @@ def defComs(dev, parent):
 	@parent.command("KEY_C")
 	async def calcuator(pressType):
 		parent.exeCom("gnome-calculator")
+	@parent.command("KEY_F")
+	async def firefox(pressType):
+		parent.exeCom("firefox")
+	
