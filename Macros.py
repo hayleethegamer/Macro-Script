@@ -9,13 +9,10 @@ def set_procname(newname):
 	libc.prctl(15, byref(buff), 0, 0, 0) #Refer to "#define" of "/usr/include/linux/prctl.h" for the misterious value 16 & arg[3..5] are zero as the man page says.
 set_procname("MacroManger.py")
 
-import argparse
 import tkinter as tk
 import os
 import sys
-parser = argparse.ArgumentParser(description="Macro Manager")
-parser.add_argument("id", help="The ID of the user being logged in", type=int)
-parsed = parser.parse_args()
+
 
 class Error(tk.Frame):
 	def __init__(self, errorMess, master=None):
@@ -57,12 +54,13 @@ except PermissionError:
 	ErrorDialog = Error(errorMessage, tk.Tk())
 	sys.exit()
 dev.grab()
-os.setuid(parsed.id)
-username = os.getlogin()
-os.environ["MAIL"] = "/var/spool/mail/{}".format(username.lower())
-os.environ["LOGNAME"] = "{}".format(username.lower())
-os.environ["USER"] = "{}".format(username.lower())
-os.environ["HOME"] = "/home/{}".format(username.lower())
+userID = int(os.environ["SUDO_UID"])
+if userID == 0:
+	errorMessage = "Error, Script not allowed to run as root the entire time."
+	ErrorDialog = Error(errorMessage, tk.Tk())
+	sys.exit()
+else:
+	os.setuid(userID) #gets ID From user name
 
 #Code from here on rus as user
 import asyncio
